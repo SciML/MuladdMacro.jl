@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/JuliaDiffEq/MuladdMacro.jl.svg?branch=master)](https://travis-ci.org/JuliaDiffEq/MuladdMacro.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/ospomrhxtmiylx57?svg=true)](https://ci.appveyor.com/project/ChrisRackauckas/muladdmacro-jl)
-[![Coverage Status](https://coveralls.io/repos/ChrisRackauckas/MuladdMacro.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/ChrisRackauckas/MuladdMacro.jl?branch=master)
-[![codecov.io](http://codecov.io/github/ChrisRackauckas/MuladdMacro.jl/coverage.svg?branch=master)](http://codecov.io/github/ChrisRackauckas/MuladdMacro.jl?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/JuliaDiffEq/MuladdMacro.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaDiffEq/MuladdMacro.jl?branch=master)
+[![codecov.io](http://codecov.io/github/JuliaDiffEq/MuladdMacro.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaDiffEq/MuladdMacro.jl?branch=master)
 
 This package provides the `@muladd` macro. It automatically converts expressions
 with multiplications and additions to calls with `muladd` which then fuse via
