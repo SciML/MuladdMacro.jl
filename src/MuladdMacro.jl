@@ -37,53 +37,53 @@ function to_muladd(ex::Expr)
     # define summands that are reduced with muladd and the initial element of the reduction
     if isempty(odd_operands)
         # if all summands are multiplications one of these summands is
-        # the initial element of the reduction
-        to_be_muladded = mul_operands[1:end-1]
-        last_operation = mul_operands[end]
+        # the initial element of the reduction and evaluated first
+        first_operation = mul_operands[1]
+        to_be_muladded = mul_operands[2:end]
     else
         to_be_muladded = mul_operands
 
         # expressions that are no multiplications are summed up in a separate expression
-        # that is the initial element of the reduction
+        # that is the initial element of the reduction and evaluated first
         # if the original addition was a dot call this expression also is a dot call
         if length(odd_operands) == 1
-            last_operation = odd_operands[1]
+            first_operation = odd_operands[1]
         elseif isdotcall(ex)
             # make sure returned expression has same style as original expression
             if ex.head == :.
-                last_operation = Expr(:., :+, Expr(:tuple, odd_operands...))
+                first_operation = Expr(:., :+, Expr(:tuple, odd_operands...))
             else
-                last_operation = Expr(:call, :.+, odd_operands...)
+                first_operation = Expr(:call, :.+, odd_operands...)
             end
         else
-            last_operation = Expr(:call, :+, odd_operands...)
+            first_operation = Expr(:call, :+, odd_operands...)
         end
     end
 
     # reduce sum to a composition of muladd
-    foldr(last_operation, to_be_muladded) do xs, r
+    foldl(first_operation, to_be_muladded) do last_expr, next_expr
         # retrieve factors of multiplication that will be reduced next
-        xs_operands = operands(xs)
+        next_operands = operands(next_expr)
 
-        # first factor is always first operand
-        xs_factor1 = xs_operands[1]
+        # second factor is always last operand
+        next_factor2 = next_operands[end]
 
-        # second factor is an expression of a multiplication if there are more than
+        # first factor is an expression of a multiplication if there are more than
         # two operands
         # if the original multiplication was a dot call this expression also is a dot call
-        if length(xs_operands) == 2
-            xs_factor2 = xs_operands[2]
-        elseif isdotcall(xs)
-            xs_factor2 = Expr(:., :*, Expr(:tuple, xs_operands[2:end]...))
+        if length(next_operands) == 2
+            next_factor1 = next_operands[1]
+        elseif isdotcall(next_expr)
+            next_factor1 = Expr(:., :*, Expr(:tuple, next_operands[1:end-1]...))
         else
-            xs_factor2 = Expr(:call, :*, xs_operands[2:end]...)
+            next_factor1 = Expr(:call, :*, next_operands[1:end-1]...)
         end
 
         # create a dot call if both involved operators are dot calls
         if isdotcall(ex)
-            Expr(:., Base.muladd, Expr(:tuple, xs_factor1, xs_factor2, r))
+            Expr(:., Base.muladd, Expr(:tuple, next_factor1, next_factor2, last_expr))
         else
-            Expr(:call, Base.muladd, xs_factor1, xs_factor2, r)
+            Expr(:call, Base.muladd, next_factor1, next_factor2, last_expr)
         end
     end
 end

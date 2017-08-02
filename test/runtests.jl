@@ -11,15 +11,15 @@ end
 
 # Additional factors
 @testset "Additional factors" begin
-    @test @macroexpand(@muladd a*b*c+d) == :($(Base.muladd)(a, b*c, d))
-    @test @macroexpand(@muladd a*b*c*d+e) == :($(Base.muladd)(a, b*c*d, e))
+    @test @macroexpand(@muladd a*b*c+d) == :($(Base.muladd)(a*b, c, d))
+    @test @macroexpand(@muladd a*b*c*d+e) == :($(Base.muladd)(a*b*c, d, e))
 end
 
 # Multiple multiplications
 @testset "Multiple multiplications" begin
-    @test @macroexpand(@muladd a*b+c*d) == :($(Base.muladd)(a, b, c*d))
-    @test @macroexpand(@muladd a*b+c*d+e*f) == :($(Base.muladd)(a, b,
-                                                                $(Base.muladd)(c, d, e*f)))
+    @test @macroexpand(@muladd a*b+c*d) == :($(Base.muladd)(c, d, a*b))
+    @test @macroexpand(@muladd a*b+c*d+e*f) == :($(Base.muladd)(e, f,
+                                                                $(Base.muladd)(c, d, a*b)))
     @test @macroexpand(@muladd a*(b*c+d)+e) == :($(Base.muladd)(a,
                                                                 $(Base.muladd)(b, c, d), e))
 end
@@ -32,7 +32,7 @@ end
     @test @macroexpand(@muladd a*b.+c) == :(a*b.+c)
     @test @macroexpand(@muladd .+(a.*b, c, d)) == :($(Base.muladd).(a, b, c.+d))
     @test @macroexpand(@muladd @. a*b+c+d) == :($(Base.muladd).(a, b, (+).(c, d)))
-    @test @macroexpand(@muladd @. a*b*c+d) == :($(Base.muladd).(a, (*).(b, c), d))
+    @test @macroexpand(@muladd @. a*b*c+d) == :($(Base.muladd).((*).(a, b), c, d))
     @test @macroexpand(@muladd f.(a)*b+c) == :($(Base.muladd)(f.(a), b, c))
     @test @macroexpand(@muladd a*f.(b)+c) == :($(Base.muladd)(a, f.(b), c))
     @test @macroexpand(@muladd a*b+f.(c)) == :($(Base.muladd)(a, b, f.(c)))
