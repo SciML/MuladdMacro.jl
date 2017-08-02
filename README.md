@@ -9,16 +9,15 @@ This package provides the `@muladd` macro. It automatically converts expressions
 with multiplications and additions to calls with `muladd` which then fuse via
 FMA when it would increase the performance of the code. The `@muladd` macro
 can be placed on code blocks and it will automatically find the appropriate
-expressions and nest muladd expressions when necessary.
+expressions and nest muladd expressions when necessary. In mixed expressions summands without multiplication will be grouped together and evaluated first but otherwise the order of evaluation of multiplications and additions is not changed.
 
 ## Examples
 
 ```julia
 julia> macroexpand(:(@muladd k3 = f(t + c3*dt, @. uprev+dt*(a031*k1+a032*k2))))
-:(k3 = f((muladd)(c3, dt, t), (muladd).(dt, (muladd).(a031, k1, *.(a032, k2)), uprev)))
-
+:(k3 = f((muladd)(c3, dt, t), (muladd).(dt, (muladd).(a032, k2, *.(a031, k1)), uprev)))
 julia> macroexpand(:(@muladd integrator.EEst = integrator.opts.internalnorm((update - dt*(bhat1*k1 + bhat4*k4 + bhat5*k5 + bhat6*k6 + bhat7*k7 + bhat10*k10))./ @. (integrator.opts.abstol+max(abs(uprev),abs(u))*integrator.opts.reltol))))
-:(integrator.EEst = integrator.opts.internalnorm((update - dt * (muladd)(bhat1, k1, (muladd)(bhat4, k4, (muladd)(bhat5, k5, (muladd)(bhat6, k6, (muladd)(bhat7, k7, bhat10 * k10)))))) ./ (muladd).(max.(abs.(uprev), abs.(u)), integrator.opts.reltol, integrator.opts.abstol)))
+:(integrator.EEst = integrator.opts.internalnorm((update - dt * (muladd)(bhat10, k10, (muladd)(bhat7, k7, (muladd)(bhat6, k6, (muladd)(bhat5, k5, (muladd)(bhat4, k4, bhat1 * k1)))))) ./ (muladd).(max.(abs.(uprev), abs.(u)), integrator.opts.reltol, integrator.opts.abstol)))
 ```
 
 ## Broadcasting
