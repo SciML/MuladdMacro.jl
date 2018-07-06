@@ -1,5 +1,5 @@
 using MuladdMacro
-using Base.Test
+using Test
 
 # Basic expressions
 @testset "Basic expressions" begin
