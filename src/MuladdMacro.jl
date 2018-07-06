@@ -61,7 +61,7 @@ function to_muladd(ex::Expr)
     end
 
     # reduce sum to a composition of muladd
-    foldl(first_operation, to_be_muladded) do last_expr, next_expr
+    foldl(to_be_muladded; init=first_operation) do last_expr, next_expr
         # retrieve factors of multiplication that will be reduced next
         next_operands = operands(next_expr)
 
