@@ -1,6 +1,7 @@
+__precompile__(true)
 module MuladdMacro
 
-using MacroTools: postwalk, @capture
+using MacroTools: postwalk
 
 """
     @muladd
@@ -42,6 +43,7 @@ Replace sum `ex` by sequence of `muladd` if possible. Hereby the order of summat
 function sum_to_muladd(ex)
     # Retrieve summands
     summands = args(ex)
+    summands == nothing && return ex
 
     # Skip further calculations if no summand is a multiplication
     dotcall = isdotcall(ex)
@@ -68,7 +70,10 @@ Replace subtraction `ex` by `muladd` if possible.
 """
 function sub_to_muladd(ex)
     # Retrieve operands
-    x, y = args(ex)
+    _x = args(ex)
+    _x == nothing && return ex
+    length(_x) <= 1 && return ex
+    x, y = _x
 
     # Modify subtraction if possible
     dotcall = isdotcall(ex)
@@ -87,23 +92,38 @@ end
 
 Determine whether `ex` is a dot call.
 """
-isdotcall(ex) =
-    (@capture(ex, (f_)(__)) && startswith(string(f), '.')) ||
-    @capture(ex, (_).(__))
+isdotcall(ex) = (typeof(ex) <: Expr && !isempty(ex.args)) ? ex.head == :. || string(ex.args[1])[1] == '.' : false
+
+"""
+    iscall(ex, op)
+
+Determine whether `ex` is a call to `op`.
+"""
+function iscall(ex, op)
+    !(typeof(ex) <: Expr) && return false
+    isempty(ex.args) && return false
+    if ex.head == :call
+        return ex.args[1] == op || ex.args[1] == Symbol(:., op)
+    else ex.head == :.
+        length(ex.args) < 2 && return false
+        return ex.args[1] == op && ( typeof(ex.args[2]) <: Expr && ex.args[2].head == :tuple )
+    end
+    return false
+end
 
 """
     issum(ex)
 
 Determine whether `ex` is a sum.
 """
-issum(ex) = @capture(ex, +(__) | .+(__) | (+).(__))
+issum(ex) = iscall(ex, :+)
 
 """
     issub(ex)
 
 Determine whether `ex` is a subtraction.
 """
-issub(ex) = @capture(ex, -(_, _) | .-(_, _) | (-).(_, _))
+issub(ex) = iscall(ex, :-)
 
 """
     ismul(ex, dot::Bool)
@@ -112,10 +132,13 @@ Determine whether expression `ex` is a multiplication that is dotted if
 `dot` is `true` and not dotted otherwise.
 """
 function ismul(ex, dot::Bool)
+    !(typeof(ex) <: Expr) && return false
+    isempty(ex.args) && return false
     if dot
-        return @capture(ex, .*(__) | (*).(__))
+        return typeof(ex) <: Expr &&
+        ( ex.args[1] == :.* || (ex.head == :. && ex.args[1] == :*) )
     else
-        return @capture(ex, *(__))
+        return typeof(ex) <: Expr && ex.args[1] == :*
     end
 end
 
@@ -140,9 +163,20 @@ end
 Return arguments of function call in `ex`.
 """
 function args(ex)
-    @capture(ex, (_)(x__) | (_).(x__)) || error("expression is not a function call")
-
-    return x
+    if typeof(ex) <: Expr
+        if ex.head == :call
+            length(ex.args) < 2 && return nothing
+            x = ex.args[2:end]
+            return x
+        end
+        if ex.head == :.
+            length(ex.args) < 2 && return nothing
+            x = ex.args[2].args[1:end]
+            length(ex.args[2].args) < 2 && return nothing
+            return x
+        end
+    end
+    error("expression is not a function call")
 end
 
 """
@@ -152,9 +186,17 @@ Split arguments of function call `ex` before last argument and combine first
 arguments to one expression if possible.
 """
 function splitargs(ex)
-    @capture(ex, (_)(x__, y_) | (_).(x__, y_)) || error("cannot split arguments")
-
-    return newargs(ex, x...), y
+    if ex.head == :call
+        x = ex.args[2:end-1]
+        y = ex.args[end]
+        return newargs(ex, x...), y
+    end
+    if ex.head == :.
+        x = ex.args[2].args[1:end-1]
+        y = ex.args[2].args[end]
+        return newargs(ex, x...), y
+    end
+    error("cannot split arguments")
 end
 
 """
@@ -168,13 +210,11 @@ argument is provided it is returned.
 function newargs(ex, args...)
     # Return single argument
     length(args) == 1 && return args[1]
+    f = ex.args[1]
 
     # Create function calls with new arguments
-    if @capture(ex, (f_)(__))
-        return :($f($(args...)))
-    elseif @capture(ex, (f_).(__))
-        return :(($f).($(args...)))
-    end
+    ex.head == :. && return :(($f).($(args...)))
+    ex.head == :call && return :(($f)($(args...)))
 
     error("expression is not a function call")
 end
