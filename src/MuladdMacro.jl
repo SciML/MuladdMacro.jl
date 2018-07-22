@@ -85,10 +85,10 @@ end
 """
     iscall(ex, op)
 
-Determine whether `ex` is a call of operation `op`.
+Determine whether `ex` is a call of operation `op` with at least two arguments.
 """
 iscall(ex::Expr, op) =
-    ex.head == :call && !isempty(ex.args) && ex.args[1] == op
+    ex.head == :call && length(ex.args) > 2 && ex.args[1] == op
 iscall(ex, op) = false
 
 """
@@ -104,11 +104,11 @@ isdotcall(ex) = false
 """
     isdotcall(ex, op)
 
-Determine whether `ex` is a dot call of operation `op`.
+Determine whether `ex` is a dot call of operation `op` with at least two arguments.
 """
 isdotcall(ex::Expr, op) =
-    (ex.head == :. && length(ex.args) == 2 && ex.args[1] == op && Meta.isexpr(ex.args[2], :tuple)) ||
-    (ex.head == :call && !isempty(ex.args) && ex.args[1] == Symbol('.', op))
+    (ex.head == :. && length(ex.args) == 2 && ex.args[1] == op && Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1) ||
+    (ex.head == :call && length(ex.args) > 2 && ex.args[1] == Symbol('.', op))
 isdotcall(ex, op) = false
 
 """
