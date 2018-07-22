@@ -43,6 +43,7 @@ Replace sum `ex` by sequence of `muladd` if possible. Hereby the order of summat
 function sum_to_muladd(ex)
     # Retrieve summands
     summands = args(ex)
+    summands == nothing && return ex
 
     # Skip further calculations if no summand is a multiplication
     dotcall = isdotcall(ex)
@@ -70,7 +71,8 @@ Replace subtraction `ex` by `muladd` if possible.
 function sub_to_muladd(ex)
     # Retrieve operands
     _x = args(ex)
-    length(_x) == 1 && return ex
+    _x == nothing && return ex
+    length(_x) <= 1 && return ex
     x, y = _x
 
     # Modify subtraction if possible
@@ -90,7 +92,7 @@ end
 
 Determine whether `ex` is a dot call.
 """
-isdotcall(ex) = typeof(ex) <: Expr ? ex.head == :. || string(ex.args[1])[1] == '.' : false
+isdotcall(ex) = (typeof(ex) <: Expr && !isempty(ex.args)) ? ex.head == :. || string(ex.args[1])[1] == '.' : false
 
 """
     iscall(ex, op)
@@ -99,9 +101,14 @@ Determine whether `ex` is a call to `op`.
 """
 function iscall(ex, op)
     !(typeof(ex) <: Expr) && return false
-    length(ex.args) == 0 && return false
-    _op = ex.args[1]
-    return _op == op || _op == Symbol(:., op)
+    isempty(ex.args) && return false
+    if ex.head == :call
+        return ex.args[1] == op || ex.args[1] == Symbol(:., op)
+    else ex.head == :.
+        length(ex.args) < 2 && return false
+        return ex.args[1] == op && ( typeof(ex.args[2]) <: Expr && ex.args[2].head == :tuple )
+    end
+    return false
 end
 
 """
@@ -126,7 +133,7 @@ Determine whether expression `ex` is a multiplication that is dotted if
 """
 function ismul(ex, dot::Bool)
     !(typeof(ex) <: Expr) && return false
-    length(ex.args) == 0 && return false
+    isempty(ex.args) && return false
     if dot
         return typeof(ex) <: Expr &&
         ( ex.args[1] == :.* || (ex.head == :. && ex.args[1] == :*) )
@@ -158,11 +165,14 @@ Return arguments of function call in `ex`.
 function args(ex)
     if typeof(ex) <: Expr
         if ex.head == :call
+            length(ex.args) < 2 && return nothing
             x = ex.args[2:end]
             return x
         end
         if ex.head == :.
+            length(ex.args) < 2 && return nothing
             x = ex.args[2].args[1:end]
+            length(ex.args[2].args) < 2 && return nothing
             return x
         end
     end
