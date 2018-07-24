@@ -40,12 +40,16 @@ end
             :($(Base.muladd)(e, f, $(Base.muladd)(c, d, a*b)))
         @test @macroexpand(@muladd a*(b*c+d)+e) ==
             :($(Base.muladd)(a, $(Base.muladd)(b, c, d), e))
+
+        @test @macroexpand(@muladd +a) == :(+a)
     end
 
     @testset "Subtraction" begin
         @test @macroexpand(@muladd a*b-c*d) == :($(Base.muladd)(-c, d, a*b))
         @test @macroexpand(@muladd a*(b*c-d)-e) ==
             :($(Base.muladd)(a, $(Base.muladd)(b, c, -d), -e))
+
+        @test @macroexpand(@muladd -a) == :(-a)
     end
 end
 
@@ -64,6 +68,8 @@ end
         @test @macroexpand(@muladd f.(a)*b+c) == :($(Base.muladd)(f.(a), b, c))
         @test @macroexpand(@muladd a*f.(b)+c) == :($(Base.muladd)(a, f.(b), c))
         @test @macroexpand(@muladd a*b+f.(c)) == :($(Base.muladd)(a, b, f.(c)))
+
+        @test @macroexpand(@muladd .+a) == :(.+a)
     end
 
     @testset "Subtraction" begin
@@ -76,6 +82,8 @@ end
         @test @macroexpand(@muladd @. a-b*c) == :($(Base.muladd).((-).(b), c, a))
         @test @macroexpand(@muladd a-b.*c) == :(a-b.*c)
         @test @macroexpand(@muladd a.-b*c) == :(a.-b*c)
+
+        @test @macroexpand(@muladd .-a) == :(.-a)
     end
 end
 
