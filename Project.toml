@@ -1,0 +1,14 @@
+name = "MuladdMacro"
+uuid = "46d2c3a1-f734-5fdb-9937-b9b9aeba4221"
+
+[deps]
+MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+
+[compat]
+julia = "≥ 0.7.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
