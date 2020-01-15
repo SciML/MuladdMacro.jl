@@ -1,11 +1,8 @@
 name = "MuladdMacro"
 uuid = "46d2c3a1-f734-5fdb-9937-b9b9aeba4221"
-
-[deps]
-MacroTools = "1914dd2f-81c6-5fcd-8719-6d5c9610ff09"
+version = "0.2.2"
 
 [compat]
-MacroTools = "0.5"
 julia = "1"
 
 [extras]

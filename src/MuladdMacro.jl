@@ -1,6 +1,24 @@
 module MuladdMacro
 
-using MacroTools: postwalk
+"""
+    postwalk(f, expr)
+
+Apply the function `f` to each subexpression within expr.
+
+Example:
+```
+julia> double(x::Int)=2x;  # Int Literals
+
+julia> double(x::Any)=x;   # Everything else (e.g. Expressions and Symbols)
+
+julia> MuladdMacro.postwalk(double, :(1+2*3));
+
+julia> MuladdMacro.postwalk(double, :(1+2*3))
+:(2 + 4 * 6)
+```
+"""
+postwalk(f, x) = f(x)
+postwalk(f, expr::Expr) = f(Expr(expr.head, (postwalk(f, arg) for arg in expr.args)...))
 
 """
     @muladd
