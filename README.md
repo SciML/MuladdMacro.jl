@@ -1,7 +1,6 @@
 # MuladdMacro.jl
 
-[![Build Status](https://travis-ci.org/JuliaDiffEq/MuladdMacro.jl.svg?branch=master)](https://travis-ci.org/JuliaDiffEq/MuladdMacro.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/ospomrhxtmiylx57?svg=true)](https://ci.appveyor.com/project/ChrisRackauckas/muladdmacro-jl)
+[![Build Status](https://github.com/SciML/MuladdMacro.jl/workflows/CI/badge.svg)](https://github.com/SciML/MuladdMacro.jl/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/JuliaDiffEq/MuladdMacro.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaDiffEq/MuladdMacro.jl?branch=master)
 [![codecov.io](http://codecov.io/github/JuliaDiffEq/MuladdMacro.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaDiffEq/MuladdMacro.jl?branch=master)
 
