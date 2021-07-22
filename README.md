@@ -8,7 +8,8 @@ This package provides the `@muladd` macro. It automatically converts expressions
 with multiplications and additions or subtractions to calls with `muladd` which then fuse via
 FMA when it would increase the performance of the code. The `@muladd` macro
 can be placed on code blocks and it will automatically find the appropriate
-expressions and nest muladd expressions when necessary. In mixed expressions summands without multiplication will be grouped together and evaluated first but otherwise the order of evaluation of multiplications and additions is not changed.
+expressions and nest muladd expressions when necessary. In mixed expressions summands without multiplication 
+will be grouped together and evaluated first but otherwise the order of evaluation of multiplications and additions is not changed.
 
 ## Examples
 
@@ -25,6 +26,28 @@ julia> @macroexpand(@muladd integrator.EEst = integrator.opts.internalnorm((upda
 A `muladd` call will be broadcasted if both the `*` and the `+` or `-` are broadcasted.
 If either one is not broadcasted, then the expression will be converted to a
 non-dotted `muladd`.
+
+## Limitations
+
+Currently, `@muladd` handles only explicit calls of `+` and `*`. In particular, assignments
+using `+=` or literal power such as `^2` are not supported. Thus, you need to rewrite them, e.g.
+```julia
+julia> using MuladdMacro
+
+julia> a = 1.0; b = 2.0; c = 3.0;
+
+julia> @macroexpand @muladd a += b * c # does not work
+:(a += b * c)
+
+julia> @macroexpand @muladd a = a + b * c # good alternative
+:(a = (muladd)(b, c, a))
+
+julia> @macroexpand @muladd a + b^2 # does not work
+:(a + b ^ 2)
+
+julia> @macroexpand @muladd a + b * b # good alternative
+:((muladd)(b, b, a))
+```
 
 ## Credit
 
