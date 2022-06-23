@@ -105,8 +105,7 @@ end
 
 Determine whether `ex` is a call of operation `op` with at least two arguments.
 """
-iscall(ex::Expr, op) =
-    ex.head == :call && length(ex.args) > 2 && ex.args[1] == op
+iscall(ex::Expr, op) = ex.head == :call && length(ex.args) > 2 && ex.args[1] == op
 iscall(ex, op) = false
 
 """
@@ -114,9 +113,10 @@ iscall(ex, op) = false
 
 Determine whether `ex` is a dot call.
 """
-isdotcall(ex::Expr) =
+function isdotcall(ex::Expr)
     (ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)) ||
-    (ex.head == :call && !isempty(ex.args) && startswith(string(ex.args[1]), '.'))
+        (ex.head == :call && !isempty(ex.args) && startswith(string(ex.args[1]), '.'))
+end
 isdotcall(ex) = false
 
 """
@@ -124,9 +124,11 @@ isdotcall(ex) = false
 
 Determine whether `ex` is a dot call of operation `op` with at least two arguments.
 """
-isdotcall(ex::Expr, op) =
-    (ex.head == :. && length(ex.args) == 2 && ex.args[1] == op && Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1) ||
-    (ex.head == :call && length(ex.args) > 2 && ex.args[1] == Symbol('.', op))
+function isdotcall(ex::Expr, op)
+    (ex.head == :. && length(ex.args) == 2 && ex.args[1] == op &&
+     Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1) ||
+        (ex.head == :call && length(ex.args) > 2 && ex.args[1] == Symbol('.', op))
+end
 isdotcall(ex, op) = false
 
 """
@@ -176,7 +178,8 @@ function args(ex::Expr)
         return ex.args[2:end]
     end
 
-    if ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) && !isempty(ex.args[2].args)
+    if ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
+       !isempty(ex.args[2].args)
         return ex.args[2].args
     end
 
@@ -191,10 +194,11 @@ arguments to one expression if possible.
 """
 function splitargs(ex)
     if ex.head == :call && length(ex.args) > 2
-        x = ex.args[2:end-1]
+        x = ex.args[2:(end - 1)]
         y = ex.args[end]
-    elseif ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1
-        x = ex.args[2].args[1:end-1]
+    elseif ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
+           length(ex.args[2].args) > 1
+        x = ex.args[2].args[1:(end - 1)]
         y = ex.args[2].args[end]
     else
         error("cannot split arguments")
