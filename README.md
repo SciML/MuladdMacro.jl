@@ -1,8 +1,13 @@
 # MuladdMacro.jl
 
-[![Build Status](https://github.com/SciML/MuladdMacro.jl/workflows/CI/badge.svg)](https://github.com/SciML/MuladdMacro.jl/actions?query=workflow%3ACI)
-[![Coverage Status](https://coveralls.io/repos/github/JuliaDiffEq/MuladdMacro.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaDiffEq/MuladdMacro.jl?branch=master)
-[![codecov.io](http://codecov.io/github/JuliaDiffEq/MuladdMacro.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaDiffEq/MuladdMacro.jl?branch=master)
+[![Join the chat at https://julialang.zulipchat.com #sciml-bridged](https://img.shields.io/static/v1?label=Zulip&message=chat&color=9558b2&labelColor=389826)](https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged)
+[![Global Docs](https://img.shields.io/badge/docs-SciML-blue.svg)](https://docs.sciml.ai/dev/modules/MuladdMacro/)
+
+[![codecov](https://codecov.io/gh/SciML/MulAddMacro.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/SciML/MulAddMacro.jl)
+[![Build Status](https://github.com/SciML/MulAddMacro.jl/workflows/CI/badge.svg)](https://github.com/SciML/MulAddMacro.jl/actions?query=workflow%3ACI)
+
+[![ColPrac: Contributor's Guide on Collaborative Practices for Community Packages](https://img.shields.io/badge/ColPrac-Contributor's%20Guide-blueviolet)](https://github.com/SciML/ColPrac)
+[![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
 
 This package provides the `@muladd` macro. It automatically converts expressions
 with multiplications and additions or subtractions to calls with `muladd` which then fuse via
