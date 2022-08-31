@@ -33,12 +33,8 @@ jobs:
     
     - name: Report invalidation counts
       run: |
-        echo "Invalidations on default branch: ${{ steps.invs_default.outputs.total }} (${{ steps.invs_default.outputs.deps }} via deps)"
-        echo "This branch: ${{ steps.invs_pr.outputs.total }} (${{ steps.invs_pr.outputs.deps }} via deps)"
-      shell: bash
-    - name: PR doesn't increase number of invalidations
-      run: |
-        if (( ${{ steps.invs_pr.outputs.total }} > ${{ steps.invs_default.outputs.total }} )); then
-            exit 1
-        fi
-      shell: bash
+        echo "Invalidations on default branch: ${{ steps.invs_default.outputs.total }} (${{ steps.invs_default.outputs.deps }} via deps)" >> $GITHUB_STEP_SUMMARY
+        echo "This branch: ${{ steps.invs_pr.outputs.total }} (${{ steps.invs_pr.outputs.deps }} via deps)" >> $GITHUB_STEP_SUMMARY
+    - name: Check if the PR does increase number of invalidations
+      if: steps.invs_pr.outputs.total > steps.invs_default.outputs.total
+      run: exit 1
