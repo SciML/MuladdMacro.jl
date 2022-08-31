@@ -1,5 +1,5 @@
 name: Invalidations
-on: pull_request
+on: master
 
 jobs:
   evaluate:
