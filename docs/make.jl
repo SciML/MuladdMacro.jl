@@ -17,8 +17,7 @@ makedocs(;
                                   assets = String[]),
          pages = ["Home" => "index.md", "api.md"],
          strict = true,
-         checkdocs = :exports,
-)
+         checkdocs = :exports)
 
 deploydocs(;
            repo = "github.com/SciML/MuladdMacro.jl",
