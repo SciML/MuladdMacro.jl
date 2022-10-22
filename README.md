@@ -1,8 +1,7 @@
 # MuladdMacro.jl
 
 [![Join the chat at https://julialang.zulipchat.com #sciml-bridged](https://img.shields.io/static/v1?label=Zulip&message=chat&color=9558b2&labelColor=389826)](https://julialang.zulipchat.com/#narrow/stream/279055-sciml-bridged)
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://muladdmacro.sciml.ai/stable/)
-[![Global Docs](https://img.shields.io/badge/docs-SciML-blue.svg)](https://docs.sciml.ai/dev/modules/MuladdMacro/)
+[![Global Docs](https://img.shields.io/badge/docs-SciML-blue.svg)](https://docs.sciml.ai/MuladdMacro/stable/)
 
 [![codecov](https://codecov.io/gh/SciML/MulAddMacro.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/SciML/MulAddMacro.jl?branch=master)
 [![Build Status](https://github.com/SciML/MulAddMacro.jl/workflows/CI/badge.svg?branch=master)](https://github.com/SciML/MulAddMacro.jl/actions?query=workflow%3ACI%20branch%3Amaster)
