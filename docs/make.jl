@@ -13,7 +13,7 @@ makedocs(;
          sitename = "MuladdMacro.jl",
          format = Documenter.HTML(;
                                   prettyurls = get(ENV, "CI", "false") == "true",
-                                  canonical = "https://muladdmacro.sciml.ai/",
+                                  canonical = "https://docs.sciml.ai/MuladdMacro/stable/",
                                   assets = String[]),
          pages = ["Home" => "index.md", "api.md"],
          strict = true,
