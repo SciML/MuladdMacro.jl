@@ -14,7 +14,7 @@ makedocs(;
          format = Documenter.HTML(;
                                   prettyurls = get(ENV, "CI", "false") == "true",
                                   canonical = "https://docs.sciml.ai/MuladdMacro/stable/",
-                                  assets = String[]),
+                                  assets = ["assets/favicon.ico"],),
          pages = ["Home" => "index.md", "api.md"],
          strict = true,
          checkdocs = :exports)
