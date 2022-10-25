@@ -16,6 +16,13 @@ can be placed on code blocks and it will automatically find the appropriate
 expressions and nest muladd expressions when necessary. In mixed expressions summands without multiplication 
 will be grouped together and evaluated first but otherwise the order of evaluation of multiplications and additions is not changed.
 
+## Tutorials and Documentation
+
+For information on using the package,
+[see the stable documentation](https://docs.sciml.ai/MuladdMacro/stable/). Use the
+[in-development documentation](https://docs.sciml.ai/MuladdMacro/dev/) for the version of
+the documentation, which contains the unreleased features.
+
 ## Examples
 
 ```jldoctest
