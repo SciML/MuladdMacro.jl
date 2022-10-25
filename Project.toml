@@ -1,6 +1,6 @@
 name = "MuladdMacro"
 uuid = "46d2c3a1-f734-5fdb-9937-b9b9aeba4221"
-version = "0.2.3"
+version = "0.2.4"
 
 [compat]
 julia = "1.6"
