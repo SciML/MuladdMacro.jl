@@ -7,6 +7,9 @@ end
 
 using MuladdMacro
 
+cp("./docs/Manifest.toml", "./docs/src/assets/Manifest.toml", force = true)
+cp("./docs/Project.toml", "./docs/src/assets/Project.toml", force = true)
+
 makedocs(;
          modules = [MuladdMacro],
          repo = "https://github.com/SciML/MuladdMacro.jl/blob/{commit}{path}#{line}",
