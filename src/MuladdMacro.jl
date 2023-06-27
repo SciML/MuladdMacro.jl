@@ -6,6 +6,7 @@ module MuladdMacro
 Apply the function `f` to each subexpression within expr.
 
 Example:
+
 ```
 julia> double(x::Int)=2x;  # Int Literals
 
