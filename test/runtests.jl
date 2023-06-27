@@ -93,15 +93,15 @@ end
     @test @macroexpand(@muladd f(x, y, z) = x * y + z) ==
           :(f(x, y, z) = $(Base.muladd)(x, y, z))
     @test @macroexpand(@muladd function f(x, y, z)
-                           x * y + z
-                       end) ==
+        x * y + z
+    end) ==
           :(function f(x, y, z)
-                $(Base.muladd)(x, y, z)
-            end)
+        $(Base.muladd)(x, y, z)
+    end)
     @test @macroexpand(@muladd(for i in 1:n
-                                   z = x * i + y
-                               end)) ==
+        z = x * i + y
+    end)) ==
           :(for i in 1:n
-                z = $(Base.muladd)(x, i, y)
-            end)
+        z = $(Base.muladd)(x, i, y)
+    end)
 end
