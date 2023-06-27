@@ -3,9 +3,9 @@
 This package provides the `@muladd` macro. It automatically converts expressions
 with multiplications and additions or subtractions to calls with `muladd` which then fuse via
 FMA when it would increase the performance of the code. The `@muladd` macro
-can be placed on code blocks and it will automatically find the appropriate
-expressions and nest muladd expressions when necessary. In mixed expressions summands without multiplication
-will be grouped together and evaluated first but otherwise the order of evaluation of multiplications and additions is not changed.
+can be placed on code blocks, and it will automatically find the appropriate
+expressions and nest muladd expressions when necessary. In mixed expressions, summands without multiplication
+will be grouped together and evaluated first, but otherwise the order of evaluation of multiplications and additions is not changed.
 
 ## Tutorials and Documentation
 
@@ -71,7 +71,7 @@ julia> @macroexpand @muladd a + b * b # good alternative
 Most of the credit goes to @fcard and @devmotion for building the first version
 and greatly refining the macro. These contributions are not directly shown as
 this was developed in Gitter chats and in the DiffEqBase.jl repository, but
-these two individuals did almost all of the work.
+these two individuals did almost all the work.
 
 ## Reproducibility
 
