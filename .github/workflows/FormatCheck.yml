@@ -21,7 +21,7 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: '1'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install JuliaFormatter
         # This will use the latest version by default but you could set the version as well:
         # Pkg.add(; name="JuliaFormatter", version="1")
