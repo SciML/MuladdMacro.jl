@@ -1,5 +1,7 @@
 using MuladdMacro, Test
 
+@testset "Quality Assurance" begin include("qa.jl") end
+
 # Basic expressions
 @testset "Basic expressions" begin
     @testset "Summation" begin
