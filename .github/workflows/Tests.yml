@@ -31,5 +31,5 @@ jobs:
     uses: "SciML/.github/.github/workflows/tests.yml@at/test-v1"
     with:
       julia-version: "${{ matrix.version }}"
+    secrets:
       CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
-    secrets: "inherit"
