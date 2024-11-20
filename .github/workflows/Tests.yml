@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - master
+      - at/test-v1
     paths-ignore:
       - 'docs/**'
 
@@ -27,7 +28,8 @@ jobs:
           - "1"
           - "lts"
           - "pre"
-    uses: "SciML/.github/.github/workflows/tests.yml@v1"
+    uses: "SciML/.github/.github/workflows/tests.yml@at/test-v1"
     with:
       julia-version: "${{ matrix.version }}"
+      CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
     secrets: "inherit"
