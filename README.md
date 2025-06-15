@@ -25,7 +25,7 @@ the documentation, which contains the unreleased features.
 
 ## Examples
 
-```jldoctest
+```julia-repl
 julia> using MuladdMacro
 
 julia> @macroexpand(@muladd k3 = f(t + c3 * dt, @. uprev + dt * (a031 * k1 + a032 * k2)))
@@ -55,7 +55,7 @@ non-dotted `muladd`.
 Currently, `@muladd` handles only explicit calls of `+` and `*`. In particular, assignments
 using `+=` or literal power such as `^2` are not supported. Thus, you need to rewrite them, e.g.
 
-```jldoctest
+```julia-repl
 julia> using MuladdMacro
 
 julia> a = 1.0;
