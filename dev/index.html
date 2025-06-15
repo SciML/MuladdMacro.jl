@@ -31,9 +31,9 @@ julia&gt; @macroexpand @muladd a + b^2 # does not work
 
 julia&gt; @macroexpand @muladd a + b * b # good alternative
 :((muladd)(b, b, a))</code></pre><h2 id="Credit"><a class="docs-heading-anchor" href="#Credit">Credit</a><a id="Credit-1"></a><a class="docs-heading-anchor-permalink" href="#Credit" title="Permalink"></a></h2><p>Most of the credit goes to @fcard and @devmotion for building the first version and greatly refining the macro. These contributions are not directly shown as this was developed in Gitter chats and in the DiffEqBase.jl repository, but these two individuals did almost all the work.</p><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this SciML package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/MuladdMacro.jl/MuladdMacro.jl/docs/Project.toml`
-  [e30172f5] Documenter v1.8.0
-  [46d2c3a1] MuladdMacro v0.2.4 `~/work/MuladdMacro.jl/MuladdMacro.jl`</code></pre></details><details><summary>and using this machine and Julia version.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Julia Version 1.11.1
-Commit 8f5b7ca12ad (2024-10-16 10:53 UTC)
+  [e30172f5] Documenter v1.12.0
+  [46d2c3a1] MuladdMacro v0.2.4 `~/work/MuladdMacro.jl/MuladdMacro.jl`</code></pre></details><details><summary>and using this machine and Julia version.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Julia Version 1.11.5
+Commit 760b2e5b739 (2025-04-14 06:53 UTC)
 Build Info:
   Official https://julialang.org/ release
 Platform Info:
@@ -46,25 +46,26 @@ Environment:
   JULIA_DEBUG = Documenter</code></pre></details><details><summary>A more complete overview of all dependencies and their versions is also provided.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/MuladdMacro.jl/MuladdMacro.jl/docs/Manifest.toml`
   [a4c015fc] ANSIColoredPrinters v0.0.1
   [1520ce14] AbstractTrees v0.4.5
-  [944b1d66] CodecZlib v0.7.6
-  [ffbed154] DocStringExtensions v0.9.3
-  [e30172f5] Documenter v1.8.0
-  [d7ba0133] Git v1.3.1
+  [944b1d66] CodecZlib v0.7.8
+  [ffbed154] DocStringExtensions v0.9.5
+  [e30172f5] Documenter v1.12.0
+  [d7ba0133] Git v1.4.0
   [b5f81e59] IOCapture v0.2.5
-  [692b3bcd] JLLWrappers v1.6.1
+  [692b3bcd] JLLWrappers v1.7.0
   [682c06a0] JSON v0.21.4
   [0e77f7df] LazilyInitializedFields v1.3.0
   [d0879d2d] MarkdownAST v0.1.2
   [46d2c3a1] MuladdMacro v0.2.4 `~/work/MuladdMacro.jl/MuladdMacro.jl`
-  [69de0a69] Parsers v2.8.1
-  [aea7be01] PrecompileTools v1.2.1
+  [69de0a69] Parsers v2.8.3
+⌅ [aea7be01] PrecompileTools v1.2.1
   [21216c6a] Preferences v1.4.3
   [2792f1a3] RegistryInstances v0.1.0
   [3bb67fe8] TranscodingStreams v0.11.3
-  [2e619515] Expat_jll v2.6.4+0
-  [f8c6e375] Git_jll v2.46.2+0
-  [94ce4f54] Libiconv_jll v1.17.0+1
-  [458c3c95] OpenSSL_jll v3.0.15+1
+  [2e619515] Expat_jll v2.6.5+0
+  [f8c6e375] Git_jll v2.49.0+0
+  [94ce4f54] Libiconv_jll v1.18.0+0
+  [9bd350c2] OpenSSH_jll v10.0.1+0
+  [458c3c95] OpenSSL_jll v3.5.0+0
   [0dad84c5] ArgTools v1.1.2
   [56f22d72] Artifacts v1.11.0
   [2a0f44e3] Base64 v1.11.0
@@ -100,4 +101,5 @@ Environment:
   [efcefdf7] PCRE2_jll v10.42.0+1
   [83775a58] Zlib_jll v1.2.13+1
   [8e850ede] nghttp2_jll v1.59.0+0
-  [3f19e933] p7zip_jll v17.4.0+2</code></pre></details><p>You can also download the <a href="https://github.com/SciML/MuladdMacro.jl/tree/gh-pages/v0.2.4/assets/Manifest.toml">manifest</a> file and the <a href="https://github.com/SciML/MuladdMacro.jl/tree/gh-pages/v0.2.4/assets/Project.toml">project</a> file.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Monday 18 November 2024 11:09">Monday 18 November 2024</span>. Using Julia version 1.11.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+  [3f19e933] p7zip_jll v17.4.0+2
+Info Packages marked with ⌅ have new versions available but compatibility constraints restrict them from upgrading. To see why use `status --outdated -m`</code></pre></details><p>You can also download the <a href="https://github.com/SciML/MuladdMacro.jl/tree/gh-pages/v0.2.4/assets/Manifest.toml">manifest</a> file and the <a href="https://github.com/SciML/MuladdMacro.jl/tree/gh-pages/v0.2.4/assets/Project.toml">project</a> file.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Sunday 15 June 2025 14:49">Sunday 15 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
