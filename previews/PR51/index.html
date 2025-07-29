@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · MuladdMacro.jl</title><meta name="title" content="Home · MuladdMacro.jl"/><meta property="og:title" content="Home · MuladdMacro.jl"/><meta property="twitter:title" content="Home · MuladdMacro.jl"/><meta name="description" content="Documentation for MuladdMacro.jl."/><meta property="og:description" content="Documentation for MuladdMacro.jl."/><meta property="twitter:description" content="Documentation for MuladdMacro.jl."/><meta property="og:url" content="https://docs.sciml.ai/MuladdMacro/stable/"/><meta property="twitter:url" content="https://docs.sciml.ai/MuladdMacro/stable/"/><link rel="canonical" href="https://docs.sciml.ai/MuladdMacro/stable/"/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href><img src="assets/logo.png" alt="MuladdMacro.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href>MuladdMacro.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Home</a><ul class="internal"><li><a class="tocitem" href="#Tutorials-and-Documentation"><span>Tutorials and Documentation</span></a></li><li><a class="tocitem" href="#Examples"><span>Examples</span></a></li><li><a class="tocitem" href="#Broadcasting"><span>Broadcasting</span></a></li><li><a class="tocitem" href="#Limitations"><span>Limitations</span></a></li><li><a class="tocitem" href="#Credit"><span>Credit</span></a></li><li><a class="tocitem" href="#Reproducibility"><span>Reproducibility</span></a></li></ul></li><li><a class="tocitem" href="api/">API</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Home</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/SciML/MuladdMacro.jl/blob/master/docs/src/index.md#" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="MuladdMacro.jl"><a class="docs-heading-anchor" href="#MuladdMacro.jl">MuladdMacro.jl</a><a id="MuladdMacro.jl-1"></a><a class="docs-heading-anchor-permalink" href="#MuladdMacro.jl" title="Permalink"></a></h1><p>This package provides the <code>@muladd</code> macro. It automatically converts expressions with multiplications and additions or subtractions to calls with <code>muladd</code> which then fuse via FMA when it would increase the performance of the code. The <code>@muladd</code> macro can be placed on code blocks, and it will automatically find the appropriate expressions and nest muladd expressions when necessary. In mixed expressions, summands without multiplication will be grouped together and evaluated first, but otherwise the order of evaluation of multiplications and additions is not changed.</p><h2 id="Tutorials-and-Documentation"><a class="docs-heading-anchor" href="#Tutorials-and-Documentation">Tutorials and Documentation</a><a id="Tutorials-and-Documentation-1"></a><a class="docs-heading-anchor-permalink" href="#Tutorials-and-Documentation" title="Permalink"></a></h2><p>For information on using the package, <a href="https://docs.sciml.ai/MuladdMacro/stable/">see the stable documentation</a>. Use the <a href="https://docs.sciml.ai/MuladdMacro/dev/">in-development documentation</a> for the version of the documentation, which contains the unreleased features.</p><h2 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h2><pre><code class="language-julia-repl hljs">julia&gt; using MuladdMacro
+
+julia&gt; @macroexpand(@muladd k3 = f(t + c3 * dt, @. uprev + dt * (a031 * k1 + a032 * k2)))
+:(k3 = f((muladd)(c3, dt, t), (muladd).(dt, (muladd).(a032, k2, (*).(a031, k1)), uprev)))
+
+julia&gt; @macroexpand(@muladd integrator.EEst = integrator.opts.internalnorm((update -
+                                                                            dt * (bhat1 * k1 +
+                                                                             bhat4 * k4 +
+                                                                             bhat5 * k5 +
+                                                                             bhat6 * k6 +
+                                                                             bhat7 * k7 +
+                                                                             bhat10 * k10)) ./
+                                                                           @. (integrator.opts.abstol +
+                                                                               max(abs(uprev),
+           abs(u)) * integrator.opts.reltol)))
+:(integrator.EEst = integrator.opts.internalnorm((muladd)(-dt, (muladd)(bhat10, k10, (muladd)(bhat7, k7, (muladd)(bhat6, k6, (muladd)(bhat5, k5, (muladd)(bhat4, k4, bhat1 * k1))))), update) ./ (muladd).(max.(abs.(uprev), abs.(u)), integrator.opts.reltol, integrator.opts.abstol)))</code></pre><h2 id="Broadcasting"><a class="docs-heading-anchor" href="#Broadcasting">Broadcasting</a><a id="Broadcasting-1"></a><a class="docs-heading-anchor-permalink" href="#Broadcasting" title="Permalink"></a></h2><p>A <code>muladd</code> call will be broadcasted if both the <code>*</code> and the <code>+</code> or <code>-</code> are broadcasted. If either one is not broadcasted, then the expression will be converted to a non-dotted <code>muladd</code>.</p><h2 id="Limitations"><a class="docs-heading-anchor" href="#Limitations">Limitations</a><a id="Limitations-1"></a><a class="docs-heading-anchor-permalink" href="#Limitations" title="Permalink"></a></h2><p>Currently, <code>@muladd</code> handles only explicit calls of <code>+</code> and <code>*</code>. In particular, assignments using <code>+=</code> or literal power such as <code>^2</code> are not supported. Thus, you need to rewrite them, e.g.</p><pre><code class="language-julia-repl hljs">julia&gt; using MuladdMacro
+
+julia&gt; a = 1.0;
+       b = 2.0;
+       c = 3.0;
+
+julia&gt; @macroexpand @muladd a += b * c # does not work
+:(a += b * c)
+
+julia&gt; @macroexpand @muladd a = a + b * c # good alternative
+:(a = (muladd)(b, c, a))
+
+julia&gt; @macroexpand @muladd a + b^2 # does not work
+:(a + b ^ 2)
+
+julia&gt; @macroexpand @muladd a + b * b # good alternative
+:((muladd)(b, b, a))</code></pre><h2 id="Credit"><a class="docs-heading-anchor" href="#Credit">Credit</a><a id="Credit-1"></a><a class="docs-heading-anchor-permalink" href="#Credit" title="Permalink"></a></h2><p>Most of the credit goes to @fcard and @devmotion for building the first version and greatly refining the macro. These contributions are not directly shown as this was developed in Gitter chats and in the DiffEqBase.jl repository, but these two individuals did almost all the work.</p><h2 id="Reproducibility"><a class="docs-heading-anchor" href="#Reproducibility">Reproducibility</a><a id="Reproducibility-1"></a><a class="docs-heading-anchor-permalink" href="#Reproducibility" title="Permalink"></a></h2><details><summary>The documentation of this SciML package was built using these direct dependencies,</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/MuladdMacro.jl/MuladdMacro.jl/docs/Project.toml`
+  [e30172f5] Documenter v1.2.1
+  [46d2c3a1] MuladdMacro v0.2.4 `~/work/MuladdMacro.jl/MuladdMacro.jl`</code></pre></details><details><summary>and using this machine and Julia version.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Julia Version 1.10.0
+Commit 3120989f39b (2023-12-25 18:01 UTC)
+Build Info:
+  Official https://julialang.org/ release
+Platform Info:
+  OS: Linux (x86_64-linux-gnu)
+  CPU: 4 × AMD EPYC 7763 64-Core Processor
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-15.0.7 (ORCJIT, znver3)
+  Threads: 1 on 4 virtual cores
+Environment:
+  JULIA_DEBUG = Documenter</code></pre></details><details><summary>A more complete overview of all dependencies and their versions is also provided.</summary><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Status `~/work/MuladdMacro.jl/MuladdMacro.jl/docs/Manifest.toml`
+  [a4c015fc] ANSIColoredPrinters v0.0.1
+  [1520ce14] AbstractTrees v0.4.4
+  [ffbed154] DocStringExtensions v0.9.3
+  [e30172f5] Documenter v1.2.1
+  [d7ba0133] Git v1.3.0
+  [b5f81e59] IOCapture v0.2.3
+  [692b3bcd] JLLWrappers v1.5.0
+  [682c06a0] JSON v0.21.4
+  [0e77f7df] LazilyInitializedFields v1.2.2
+  [d0879d2d] MarkdownAST v0.1.2
+  [46d2c3a1] MuladdMacro v0.2.4 `~/work/MuladdMacro.jl/MuladdMacro.jl`
+  [69de0a69] Parsers v2.8.1
+  [aea7be01] PrecompileTools v1.2.0
+  [21216c6a] Preferences v1.4.1
+  [2792f1a3] RegistryInstances v0.1.0
+  [2e619515] Expat_jll v2.5.0+0
+  [f8c6e375] Git_jll v2.42.0+0
+  [94ce4f54] Libiconv_jll v1.17.0+0
+  [458c3c95] OpenSSL_jll v3.0.12+0
+  [0dad84c5] ArgTools v1.1.1
+  [56f22d72] Artifacts
+  [2a0f44e3] Base64
+  [ade2ca70] Dates
+  [f43a241f] Downloads v1.6.0
+  [7b1f6079] FileWatching
+  [b77e0a4c] InteractiveUtils
+  [b27032c2] LibCURL v0.6.4
+  [76f85450] LibGit2
+  [8f399da3] Libdl
+  [56ddb016] Logging
+  [d6f4376e] Markdown
+  [a63ad114] Mmap
+  [ca575930] NetworkOptions v1.2.0
+  [44cfe95a] Pkg v1.10.0
+  [de0858da] Printf
+  [3fa0cd96] REPL
+  [9a3f8284] Random
+  [ea8e919c] SHA v0.7.0
+  [9e88b42a] Serialization
+  [6462fe0b] Sockets
+  [fa267f1f] TOML v1.0.3
+  [a4e569a6] Tar v1.10.0
+  [8dfed614] Test
+  [cf7118a7] UUIDs
+  [4ec0a83e] Unicode
+  [deac9b47] LibCURL_jll v8.4.0+0
+  [e37daf67] LibGit2_jll v1.6.4+0
+  [29816b5a] LibSSH2_jll v1.11.0+1
+  [c8ffd9c3] MbedTLS_jll v2.28.2+1
+  [14a3606d] MozillaCACerts_jll v2023.1.10
+  [efcefdf7] PCRE2_jll v10.42.0+1
+  [83775a58] Zlib_jll v1.2.13+1
+  [8e850ede] nghttp2_jll v1.52.0+1
+  [3f19e933] p7zip_jll v17.4.0+2</code></pre></details><p>You can also download the <a href="https://github.com/SciML/MuladdMacro.jl/tree/gh-pages/v0.2.4/assets/Manifest.toml">manifest</a> file and the <a href="https://github.com/SciML/MuladdMacro.jl/tree/gh-pages/v0.2.4/assets/Project.toml">project</a> file.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Sunday 7 January 2024 21:59">Sunday 7 January 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
