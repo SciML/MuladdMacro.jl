@@ -233,4 +233,20 @@ end
 
 export @muladd
 
+using PrecompileTools
+
+@setup_workload begin
+    @compile_workload begin
+        # Precompile the main code paths for to_muladd
+        # Addition with multiplication: a + b*c
+        to_muladd(:(a + b*c))
+        # Multiple additions with multiplications: a + b*c + d*e
+        to_muladd(:(a + b*c + d*e))
+        # Subtraction with multiplication: a - b*c
+        to_muladd(:(a - b*c))
+        # Dotted/broadcasted version
+        to_muladd(Expr(:., :+, Expr(:tuple, :a, Expr(:., :*, Expr(:tuple, :b, :c)))))
+    end
+end
+
 end # module
