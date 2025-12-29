@@ -22,12 +22,19 @@ postwalk(f, x) = f(x)
 postwalk(f, expr::Expr) = f(Expr(expr.head, (postwalk(f, arg) for arg in expr.args)...))
 
 """
-    @muladd
+    @muladd ex
 
 Convert every combination of addition/subtraction and multiplication to a call of `muladd`.
 
 If both of the involved operators are dotted, `muladd` is applied as a dot call.
 The order of summation might be changed.
+
+# Example
+
+```julia
+julia> @macroexpand @muladd a * b + c
+:(muladd(a, b, c))
+```
 """
 macro muladd(ex)
     esc(to_muladd(ex))
@@ -38,7 +45,7 @@ end
 
 Convert every combination of addition/subtraction and multiplication in expression `ex` to a call of `muladd`.
 
-If both of the involved operators are dotted, `muladd` is applied as a dot call
+If both of the involved operators are dotted, `muladd` is applied as a dot call.
 The order of summation might be changed.
 """
 function to_muladd(ex)
