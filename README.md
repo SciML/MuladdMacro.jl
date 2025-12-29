@@ -81,3 +81,4 @@ Most of the credit goes to @fcard and @devmotion for building the first version
 and greatly refining the macro. These contributions are not directly shown as
 this was developed in Gitter chats and in the DiffEqBase.jl repository, but
 these two individuals did almost all of the work.
+
