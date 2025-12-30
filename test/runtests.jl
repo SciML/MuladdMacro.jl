@@ -108,3 +108,10 @@ end
         z = $(Base.muladd)(x, i, y)
     end))
 end
+
+# Allocation tests - run in separate group to avoid interference with precompilation
+if get(ENV, "GROUP", "all") == "all" || get(ENV, "GROUP", "all") == "nopre"
+    @testset "Allocation Tests" begin
+        include("alloc_tests.jl")
+    end
+end
