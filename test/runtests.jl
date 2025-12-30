@@ -109,6 +109,49 @@ end
     end))
 end
 
+# Test to_muladd export and functionality
+@testset "to_muladd function" begin
+    # Test that to_muladd is exported
+    @test isdefined(MuladdMacro, :to_muladd)
+    @test to_muladd === MuladdMacro.to_muladd
+
+    # Test that to_muladd transforms expressions structurally
+    result = to_muladd(:(a * b + c))
+    @test result.head == :call
+    @test result.args[2] == :a
+    @test result.args[3] == :b
+    @test result.args[4] == :c
+
+    # Verify the function being called is Base.muladd
+    # The first arg is an Expr with head :quote containing Base.muladd
+    @test result.args[1].head == :quote
+    @test result.args[1].args[1] === Base.muladd
+
+    # Test expression without multiplication stays unchanged
+    @test to_muladd(:(a + b)) == :(a + b)
+end
+
+# Test include with to_muladd transformation
+@testset "include with to_muladd" begin
+    # Create a temporary file to test include(to_muladd, "file.jl")
+    testfile = tempname() * ".jl"
+    try
+        write(testfile, """
+        function test_muladd_include(a, b, c)
+            return a * b + c
+        end
+        """)
+
+        # Include with transformation
+        include(to_muladd, testfile)
+
+        # Test that the function works correctly
+        @test test_muladd_include(2.0, 3.0, 4.0) == 10.0
+    finally
+        isfile(testfile) && rm(testfile)
+    end
+end
+
 # Allocation tests - run in separate group to avoid interference with precompilation
 if get(ENV, "GROUP", "all") == "all" || get(ENV, "GROUP", "all") == "nopre"
     @testset "Allocation Tests" begin

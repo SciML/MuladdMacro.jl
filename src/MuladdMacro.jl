@@ -247,7 +247,7 @@ function newargs(ex::Expr, args...)
     error("expression is not a function call")
 end
 
-export @muladd
+export @muladd, to_muladd
 
 using PrecompileTools
 
