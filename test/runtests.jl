@@ -2,6 +2,8 @@ using MuladdMacro, Test
 
 @testset "Quality Assurance" include("qa.jl")
 
+@testset "Explicit Imports" include("explicit_imports.jl")
+
 # Basic expressions
 @testset "Basic expressions" begin
     @testset "Summation" begin

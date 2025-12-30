@@ -249,7 +249,7 @@ end
 
 export @muladd, to_muladd
 
-using PrecompileTools
+using PrecompileTools: @setup_workload, @compile_workload
 
 @setup_workload begin
     @compile_workload begin
