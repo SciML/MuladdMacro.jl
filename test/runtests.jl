@@ -1,6 +1,23 @@
-using MuladdMacro, Test
+using MuladdMacro, Test, JET
 
 @testset "Quality Assurance" include("qa.jl")
+
+@testset "JET static analysis" begin
+    rep = JET.report_call(MuladdMacro.to_muladd, (Expr,))
+    @test isempty(JET.get_reports(rep))
+
+    rep = JET.report_call(MuladdMacro.sum_to_muladd, (Expr,))
+    @test isempty(JET.get_reports(rep))
+
+    rep = JET.report_call(MuladdMacro.sub_to_muladd, (Expr,))
+    @test isempty(JET.get_reports(rep))
+
+    rep = JET.report_call(MuladdMacro.issum, (Expr,))
+    @test isempty(JET.get_reports(rep))
+
+    rep = JET.report_call(MuladdMacro.issub, (Expr,))
+    @test isempty(JET.get_reports(rep))
+end
 
 # Basic expressions
 @testset "Basic expressions" begin
