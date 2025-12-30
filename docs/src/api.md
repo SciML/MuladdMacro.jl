@@ -2,4 +2,5 @@
 
 ```@docs
 @muladd
+to_muladd
 ```

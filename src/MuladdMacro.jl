@@ -69,14 +69,23 @@ function sum_to_muladd(ex)
     # Retrieve summands
     summands = args(ex)
 
-    # Skip further calculations if no summand is a multiplication
+    # Check if expression is a dot call (for broadcasting)
     dotcall = isdotcall(ex)
-    any(x -> ismul(x, dotcall), summands) || return ex
 
-    # Split summands into two groups, one with expressions
-    # of multiplications and one with other expressions
-    mulsummands = filter(x -> ismul(x, dotcall), summands)
-    oddsummands = filter(x -> !ismul(x, dotcall), summands)
+    # Single-pass partition: split summands into multiplications and non-multiplications
+    # This is more efficient than calling filter twice
+    mulsummands = Any[]
+    oddsummands = Any[]
+    for s in summands
+        if ismul(s, dotcall)
+            push!(mulsummands, s)
+        else
+            push!(oddsummands, s)
+        end
+    end
+
+    # Skip if no summand is a multiplication
+    isempty(mulsummands) && return ex
 
     # If all summands are multiplications the first one is not reduced
     isempty(oddsummands) && push!(oddsummands, popfirst!(mulsummands))
@@ -238,7 +247,7 @@ function newargs(ex::Expr, args...)
     error("expression is not a function call")
 end
 
-export @muladd
+export @muladd, to_muladd
 
 using PrecompileTools
 

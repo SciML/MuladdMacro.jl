@@ -35,6 +35,19 @@ julia> @macroexpand(@muladd integrator.EEst = integrator.opts.internalnorm((upda
 :(integrator.EEst = integrator.opts.internalnorm((muladd)(-dt, (muladd)(bhat10, k10, (muladd)(bhat7, k7, (muladd)(bhat6, k6, (muladd)(bhat5, k5, (muladd)(bhat4, k4, bhat1 * k1))))), update) ./ (muladd).(max.(abs.(uprev), abs.(u)), integrator.opts.reltol, integrator.opts.abstol)))
 ```
 
+## Using `to_muladd` with `include`
+
+The `to_muladd` function is exported and can be used directly to transform expressions.
+This enables using Julia's `include` with a transformation function to automatically
+convert all expressions in a file to use `muladd`:
+
+```julia
+include(to_muladd, "file.jl")
+```
+
+This is equivalent to wrapping the entire file contents in `@muladd begin ... end`,
+but without requiring modification of the original file.
+
 ## Broadcasting
 
 A `muladd` call will be broadcasted if both the `*` and the `+` or `-` are broadcasted.
