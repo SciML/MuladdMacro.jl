@@ -122,7 +122,7 @@ end
 
 Determine whether `ex` is a call of operation `op` with at least two arguments.
 """
-iscall(ex::Expr, op) = ex.head == :call && length(ex.args) > 2 && ex.args[1] == op
+iscall(ex::Expr, op) = ex.head === :call && length(ex.args) > 2 && ex.args[1] === op
 iscall(ex, op) = false
 
 """
@@ -131,8 +131,8 @@ iscall(ex, op) = false
 Determine whether `ex` is a dot call.
 """
 function isdotcall(ex::Expr)
-    (ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)) ||
-        (ex.head == :call && !isempty(ex.args) && startswith(string(ex.args[1]), '.'))
+    (ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)) ||
+        (ex.head === :call && !isempty(ex.args) && startswith(string(ex.args[1]), '.'))
 end
 isdotcall(ex) = false
 
@@ -142,9 +142,9 @@ isdotcall(ex) = false
 Determine whether `ex` is a dot call of operation `op` with at least two arguments.
 """
 function isdotcall(ex::Expr, op)
-    (ex.head == :. && length(ex.args) == 2 && ex.args[1] == op &&
+    (ex.head === :. && length(ex.args) == 2 && ex.args[1] === op &&
      Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1) ||
-        (ex.head == :call && length(ex.args) > 2 && ex.args[1] == Symbol('.', op))
+        (ex.head === :call && length(ex.args) > 2 && ex.args[1] === Symbol('.', op))
 end
 isdotcall(ex, op) = false
 
@@ -191,11 +191,11 @@ end
 Return arguments of function call in `ex`.
 """
 function args(ex::Expr)
-    if ex.head == :call && length(ex.args) > 1
+    if ex.head === :call && length(ex.args) > 1
         return ex.args[2:end]
     end
 
-    if ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
+    if ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
        !isempty(ex.args[2].args)
         return ex.args[2].args
     end
@@ -209,11 +209,11 @@ end
 Split arguments of function call `ex` before last argument and combine first
 arguments to one expression if possible.
 """
-function splitargs(ex)
-    if ex.head == :call && length(ex.args) > 2
+function splitargs(ex::Expr)
+    if ex.head === :call && length(ex.args) > 2
         x = ex.args[2:(end - 1)]
         y = ex.args[end]
-    elseif ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
+    elseif ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
            length(ex.args[2].args) > 1
         x = ex.args[2].args[1:(end - 1)]
         y = ex.args[2].args[end]
@@ -237,10 +237,10 @@ function newargs(ex::Expr, args...)
     length(args) == 1 && return args[1]
 
     # Create function calls with new arguments
-    if ex.head == :call && !isempty(ex.args)
+    if ex.head === :call && !isempty(ex.args)
         return Expr(:call, ex.args[1], args...)
     end
-    if ex.head == :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)
+    if ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)
         return Expr(:., ex.args[1], Expr(:tuple, args...))
     end
 
