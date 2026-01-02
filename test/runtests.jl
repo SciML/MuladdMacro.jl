@@ -1,6 +1,7 @@
 using MuladdMacro, Test, JET
 
 @testset "Quality Assurance" include("qa.jl")
+@testset "Explicit Imports" include("explicit_imports.jl")
 
 @testset "JET static analysis" begin
     rep = JET.report_call(MuladdMacro.to_muladd, (Expr,))
