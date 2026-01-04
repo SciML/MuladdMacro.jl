@@ -49,7 +49,7 @@ end
         @test @macroexpand(@muladd a * b * c * d - e) == :($(Base.muladd)(a * b * c, d, -e))
         @test @macroexpand(@muladd a - b * c * d) == :($(Base.muladd)(-(b * c), d, a))
         @test @macroexpand(@muladd a - b * c * d * e) ==
-              :($(Base.muladd)(-(b * c * d), e, a))
+            :($(Base.muladd)(-(b * c * d), e, a))
     end
 end
 
@@ -58,9 +58,9 @@ end
     @testset "Summation" begin
         @test @macroexpand(@muladd a * b + c * d) == :($(Base.muladd)(c, d, a * b))
         @test @macroexpand(@muladd a * b + c * d + e * f) ==
-              :($(Base.muladd)(e, f, $(Base.muladd)(c, d, a * b)))
+            :($(Base.muladd)(e, f, $(Base.muladd)(c, d, a * b)))
         @test @macroexpand(@muladd a * (b * c + d) + e) ==
-              :($(Base.muladd)(a, $(Base.muladd)(b, c, d), e))
+            :($(Base.muladd)(a, $(Base.muladd)(b, c, d), e))
 
         @test @macroexpand(@muladd +a) == :(+a)
     end
@@ -68,7 +68,7 @@ end
     @testset "Subtraction" begin
         @test @macroexpand(@muladd a * b - c * d) == :($(Base.muladd)(-c, d, a * b))
         @test @macroexpand(@muladd a * (b * c - d) - e) ==
-              :($(Base.muladd)(a, $(Base.muladd)(b, c, -d), -e))
+            :($(Base.muladd)(a, $(Base.muladd)(b, c, -d), -e))
 
         @test @macroexpand(@muladd -a) == :(-a)
     end
@@ -111,20 +111,37 @@ end
 # Nested expressions
 @testset "Nested expressions" begin
     @test Base.remove_linenums!(@macroexpand(@muladd f(x, y, z) = x * y + z)) ==
-          Base.remove_linenums!(:(f(x, y, z) = $(Base.muladd)(x, y, z)))
-    @test Base.remove_linenums!(@macroexpand(@muladd function f(x, y, z)
-        x * y + z
-    end)) ==
-          Base.remove_linenums!(:(
-        function f(x, y, z)
-        $(Base.muladd)(x, y, z)
-    end))
-    @test Base.remove_linenums!(@macroexpand(@muladd(for i in 1:n
-        z = x * i + y
-    end))) ==
-          Base.remove_linenums!(:(for i in 1:n
-        z = $(Base.muladd)(x, i, y)
-    end))
+        Base.remove_linenums!(:(f(x, y, z) = $(Base.muladd)(x, y, z)))
+    @test Base.remove_linenums!(
+        @macroexpand(
+            @muladd function f(x, y, z)
+                x * y + z
+            end
+        )
+    ) ==
+        Base.remove_linenums!(
+        :(
+            function f(x, y, z)
+                $(Base.muladd)(x, y, z)
+            end
+        )
+    )
+    @test Base.remove_linenums!(
+        @macroexpand(
+            @muladd(
+                for i in 1:n
+                    z = x * i + y
+                end
+            )
+        )
+    ) ==
+        Base.remove_linenums!(
+        :(
+            for i in 1:n
+                z = $(Base.muladd)(x, i, y)
+            end
+        )
+    )
 end
 
 # Test to_muladd export and functionality
@@ -154,11 +171,13 @@ end
     # Create a temporary file to test include(to_muladd, "file.jl")
     testfile = tempname() * ".jl"
     try
-        write(testfile, """
-        function test_muladd_include(a, b, c)
-            return a * b + c
-        end
-        """)
+        write(
+            testfile, """
+            function test_muladd_include(a, b, c)
+                return a * b + c
+            end
+            """
+        )
 
         # Include with transformation
         include(to_muladd, testfile)
