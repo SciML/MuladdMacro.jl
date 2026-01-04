@@ -7,10 +7,14 @@ end
 
 using MuladdMacro
 
-cp(joinpath(@__DIR__, "Manifest.toml"), joinpath(@__DIR__, "src/assets/Manifest.toml");
-    force = true)
-cp(joinpath(@__DIR__, "Project.toml"), joinpath(@__DIR__, "src/assets/Project.toml");
-    force = true)
+cp(
+    joinpath(@__DIR__, "Manifest.toml"), joinpath(@__DIR__, "src/assets/Manifest.toml");
+    force = true
+)
+cp(
+    joinpath(@__DIR__, "Project.toml"), joinpath(@__DIR__, "src/assets/Project.toml");
+    force = true
+)
 
 makedocs(;
     modules = [MuladdMacro],
@@ -20,10 +24,13 @@ makedocs(;
     format = Documenter.HTML(;
         prettyurls = get(ENV, "CI", "false") == "true",
         canonical = "https://docs.sciml.ai/MuladdMacro/stable/",
-        assets = ["assets/favicon.ico"]),
+        assets = ["assets/favicon.ico"]
+    ),
     pages = ["Home" => "index.md", "api.md"],
-    checkdocs = :exports)
+    checkdocs = :exports
+)
 
 deploydocs(;
     repo = "github.com/SciML/MuladdMacro.jl",
-    push_preview = true)
+    push_preview = true
+)

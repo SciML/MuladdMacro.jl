@@ -37,7 +37,7 @@ julia> @macroexpand @muladd a * b + c
 ```
 """
 macro muladd(ex)
-    esc(to_muladd(ex))
+    return esc(to_muladd(ex))
 end
 
 """
@@ -49,7 +49,7 @@ If both of the involved operators are dotted, `muladd` is applied as a dot call.
 The order of summation might be changed.
 """
 function to_muladd(ex)
-    postwalk(ex) do x
+    return postwalk(ex) do x
         # Modify summations
         issum(x) && return sum_to_muladd(x)
 
@@ -91,7 +91,7 @@ function sum_to_muladd(ex)
     isempty(oddsummands) && push!(oddsummands, popfirst!(mulsummands))
 
     # Reduce sum to a composition of muladd
-    foldl(mulsummands; init = newargs(ex, oddsummands...)) do s₁, s₂
+    return foldl(mulsummands; init = newargs(ex, oddsummands...)) do s₁, s₂
         newmuladd(splitargs(s₂)..., s₁, dotcall)
     end
 end
@@ -131,7 +131,7 @@ iscall(ex, op) = false
 Determine whether `ex` is a dot call.
 """
 function isdotcall(ex::Expr)
-    (ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)) ||
+    return (ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple)) ||
         (ex.head === :call && !isempty(ex.args) && startswith(string(ex.args[1]), '.'))
 end
 isdotcall(ex) = false
@@ -142,8 +142,10 @@ isdotcall(ex) = false
 Determine whether `ex` is a dot call of operation `op` with at least two arguments.
 """
 function isdotcall(ex::Expr, op)
-    (ex.head === :. && length(ex.args) == 2 && ex.args[1] === op &&
-     Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1) ||
+    return (
+        ex.head === :. && length(ex.args) == 2 && ex.args[1] === op &&
+            Meta.isexpr(ex.args[2], :tuple) && length(ex.args[2].args) > 1
+    ) ||
         (ex.head === :call && length(ex.args) > 2 && ex.args[1] === Symbol('.', op))
 end
 isdotcall(ex, op) = false
@@ -178,7 +180,7 @@ Return expression `(muladd).(x, y, z)` if `dot` is `true` and
 """
 function newmuladd(x, y, z, dot::Bool)
     # Quoting seems to be required for the @. macro to work
-    if dot
+    return if dot
         :(($(Meta.quot(Base.muladd))).($x, $y, $z))
     else
         :($(Meta.quot(Base.muladd))($x, $y, $z))
@@ -196,7 +198,7 @@ function args(ex::Expr)
     end
 
     if ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
-       !isempty(ex.args[2].args)
+            !isempty(ex.args[2].args)
         return ex.args[2].args
     end
 
@@ -214,7 +216,7 @@ function splitargs(ex::Expr)
         x = ex.args[2:(end - 1)]
         y = ex.args[end]
     elseif ex.head === :. && length(ex.args) == 2 && Meta.isexpr(ex.args[2], :tuple) &&
-           length(ex.args[2].args) > 1
+            length(ex.args[2].args) > 1
         x = ex.args[2].args[1:(end - 1)]
         y = ex.args[2].args[end]
     else
@@ -255,11 +257,11 @@ using PrecompileTools: @setup_workload, @compile_workload
     @compile_workload begin
         # Precompile the main code paths for to_muladd
         # Addition with multiplication: a + b*c
-        to_muladd(:(a + b*c))
+        to_muladd(:(a + b * c))
         # Multiple additions with multiplications: a + b*c + d*e
-        to_muladd(:(a + b*c + d*e))
+        to_muladd(:(a + b * c + d * e))
         # Subtraction with multiplication: a - b*c
-        to_muladd(:(a - b*c))
+        to_muladd(:(a - b * c))
         # Dotted/broadcasted version
         to_muladd(Expr(:., :+, Expr(:tuple, :a, Expr(:., :*, Expr(:tuple, :b, :c)))))
     end
