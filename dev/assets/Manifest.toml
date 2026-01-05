@@ -181,7 +181,7 @@ version = "2025.5.20"
 
 [[deps.MuladdMacro]]
 deps = ["PrecompileTools"]
-path = "/home/chrisrackauckas/github-runners/deepsea3-11/_work/MuladdMacro.jl/MuladdMacro.jl"
+path = "/home/runner/work/MuladdMacro.jl/MuladdMacro.jl"
 uuid = "46d2c3a1-f734-5fdb-9937-b9b9aeba4221"
 version = "0.2.4"
 
