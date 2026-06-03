@@ -12,15 +12,7 @@ on:
       - 'docs/**'
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: julia-actions/setup-julia@v2
-        id: setup-julia
-        with:
-          version: '1'
-      - uses: julia-actions/julia-downgrade-compat@v2
-        with:
-          julia_version: ${{ steps['setup-julia'].outputs.julia-version }}
-      - uses: julia-actions/julia-buildpkg@v1
-      - uses: julia-actions/julia-runtest@v1
+    uses: "SciML/.github/.github/workflows/downgrade.yml@v1"
+    with:
+      julia-version: "1"
+    secrets: "inherit"
