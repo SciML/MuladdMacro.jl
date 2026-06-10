@@ -1,16 +1,10 @@
 using MuladdMacro, Aqua, ExplicitImports, JET, Test
 
 @testset "Aqua" begin
-    # deps_compat check_extras is known failing (Pkg extra lacks a compat entry)
-    # and is marked @test_broken below.
-    # Tracked in https://github.com/SciML/MuladdMacro.jl/issues/88
     Aqua.test_all(
         MuladdMacro;
-        ambiguities = (recursive = false,),
-        deps_compat = (check_extras = false,)
+        ambiguities = (recursive = false,)
     )
-    # Aqua deps_compat (extras): Pkg lacks a [compat] entry — tracked in https://github.com/SciML/MuladdMacro.jl/issues/88
-    @test_broken false
 end
 
 @testset "ExplicitImports" begin
