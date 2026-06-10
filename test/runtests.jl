@@ -1,4 +1,5 @@
 using Pkg
+using MuladdMacro, Test
 
 const GROUP = get(ENV, "GROUP", "All")
 
@@ -10,8 +11,6 @@ if GROUP == "QA"
 end
 
 if GROUP == "All" || GROUP == "Core"
-    using MuladdMacro, Test
-
     # Basic expressions
     @testset "Basic expressions" begin
         @testset "Summation" begin
