@@ -7,7 +7,7 @@ if GROUP == "QA"
     Pkg.activate(joinpath(@__DIR__, "qa"))
     Pkg.develop(PackageSpec(path = joinpath(@__DIR__, "..")))
     Pkg.instantiate()
-    include("qa.jl")
+    include(joinpath("qa", "qa.jl"))
 end
 
 if GROUP == "All" || GROUP == "Core"
