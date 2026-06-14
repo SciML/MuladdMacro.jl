@@ -1,5 +1,5 @@
 using Pkg
-using MuladdMacro, Test
+using MuladdMacro, SafeTestsets, Test
 
 const GROUP = get(ENV, "GROUP", "All")
 
@@ -12,7 +12,8 @@ end
 
 if GROUP == "All" || GROUP == "Core"
     # Basic expressions
-    @testset "Basic expressions" begin
+    @safetestset "Basic expressions" begin
+        using MuladdMacro, Test
         @testset "Summation" begin
             @test @macroexpand(@muladd a * b + c) == :($(Base.muladd)(a, b, c))
             @test @macroexpand(@muladd c + a * b) == :($(Base.muladd)(a, b, c))
@@ -29,7 +30,8 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Additional factors
-    @testset "Additional factors" begin
+    @safetestset "Additional factors" begin
+        using MuladdMacro, Test
         @testset "Summation" begin
             @test @macroexpand(@muladd a * b * c + d) == :($(Base.muladd)(a * b, c, d))
             @test @macroexpand(@muladd a * b * c * d + e) == :($(Base.muladd)(a * b * c, d, e))
@@ -45,7 +47,8 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Multiple multiplications
-    @testset "Multiple multiplications" begin
+    @safetestset "Multiple multiplications" begin
+        using MuladdMacro, Test
         @testset "Summation" begin
             @test @macroexpand(@muladd a * b + c * d) == :($(Base.muladd)(c, d, a * b))
             @test @macroexpand(@muladd a * b + c * d + e * f) ==
@@ -66,7 +69,8 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Dot calls
-    @testset "Dot calls" begin
+    @safetestset "Dot calls" begin
+        using MuladdMacro, Test
         @testset "Summation" begin
             @test @macroexpand(@. @muladd a * b + c) == :($(Base.muladd).(a, b, c))
             @test @macroexpand(@muladd @. a * b + c) == :($(Base.muladd).(a, b, c))
@@ -100,7 +104,8 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Nested expressions
-    @testset "Nested expressions" begin
+    @safetestset "Nested expressions" begin
+        using MuladdMacro, Test
         @test Base.remove_linenums!(@macroexpand(@muladd f(x, y, z) = x * y + z)) ==
             Base.remove_linenums!(:(f(x, y, z) = $(Base.muladd)(x, y, z)))
         @test Base.remove_linenums!(
@@ -136,7 +141,8 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Test to_muladd export and functionality
-    @testset "to_muladd function" begin
+    @safetestset "to_muladd function" begin
+        using MuladdMacro, Test
         # Test that to_muladd is exported
         @test isdefined(MuladdMacro, :to_muladd)
         @test to_muladd === MuladdMacro.to_muladd
@@ -158,7 +164,8 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Test include with to_muladd transformation
-    @testset "include with to_muladd" begin
+    @safetestset "include with to_muladd" begin
+        using MuladdMacro, Test
         # Create a temporary file to test include(to_muladd, "file.jl")
         testfile = tempname() * ".jl"
         try
@@ -181,7 +188,7 @@ if GROUP == "All" || GROUP == "Core"
     end
 
     # Allocation tests - run in separate group to avoid interference with precompilation
-    @testset "Allocation Tests" begin
+    @safetestset "Allocation Tests" begin
         include("alloc_tests.jl")
     end
 end

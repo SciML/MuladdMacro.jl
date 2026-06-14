@@ -1,6 +1,7 @@
-using MuladdMacro, Aqua, ExplicitImports, JET, Test
+using SafeTestsets
 
-@testset "Aqua" begin
+@safetestset "Aqua" begin
+    using MuladdMacro, Aqua, Test
     # deps_compat check_extras is known failing (Pkg extra lacks a compat entry)
     # and is marked @test_broken below.
     # Tracked in https://github.com/SciML/MuladdMacro.jl/issues/88
@@ -13,12 +14,14 @@ using MuladdMacro, Aqua, ExplicitImports, JET, Test
     @test_broken false
 end
 
-@testset "ExplicitImports" begin
+@safetestset "ExplicitImports" begin
+    using MuladdMacro, ExplicitImports, Test
     @test check_no_implicit_imports(MuladdMacro) === nothing
     @test check_no_stale_explicit_imports(MuladdMacro) === nothing
 end
 
-@testset "JET static analysis" begin
+@safetestset "JET static analysis" begin
+    using MuladdMacro, JET, Test
     rep = JET.report_call(MuladdMacro.to_muladd, (Expr,))
     @test isempty(JET.get_reports(rep))
 
