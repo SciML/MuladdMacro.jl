@@ -20,7 +20,7 @@ makedocs(;
     modules = [MuladdMacro],
     repo = "https://github.com/SciML/MuladdMacro.jl/blob/{commit}{path}#{line}",
     sitename = "MuladdMacro.jl",
-    clean = true, doctest = false, linkcheck = true,
+    clean = true, doctest = true, linkcheck = true,
     format = Documenter.HTML(;
         prettyurls = get(ENV, "CI", "false") == "true",
         canonical = "https://docs.sciml.ai/MuladdMacro/stable/",
